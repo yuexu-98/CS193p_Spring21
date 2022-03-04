@@ -21,16 +21,22 @@ struct ContentView: View {
      declare a variable of type Int -> "var a: Int"
      */
     
-    var emojis: Array<String> = ["☺️", "🙃", "😚"]
-    @State var emojiCount: Int = 2
+    var emojis: Array<String> = ["🌹", "🌸", "💐", "🌺", "🌷", "🌻", "🥀", "🌼"]
+    @State var emojiCount: Int = 8
     
     var body: some View {
         VStack{
-            HStack{
-                ForEach(emojis[0..<emojiCount], id: \.self){ emoji in
-                    CardView(content: emoji)
+            // use scrollView avoid affecting the button below
+            ScrollView{
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]){
+                    ForEach(emojis[0..<emojiCount], id: \.self){ emoji in
+                        CardView(content: emoji)
+                            .aspectRatio(2/3, contentMode: .fit)
+                    }
                 }
             }
+            .foregroundColor(.red)
+            // spacer will take all the available space in default
             Spacer()
             HStack{
                 remove
@@ -41,7 +47,6 @@ struct ContentView: View {
             .font(.largeTitle)
         }
         .padding(.horizontal)
-        .foregroundColor(.red)
     }
     
     var remove: some View {
@@ -91,7 +96,10 @@ struct CardView: View{
             let shape = RoundedRectangle(cornerRadius: 20.0)
             if isFaceUp {
                 shape.fill().foregroundColor(.white)
-                shape.stroke(lineWidth: 3.0)
+                /*
+                 use strokeBorder instead of stroke to avoid view cutting
+                 */
+                shape.strokeBorder(lineWidth: 3.0)
                 Text(content).font(.largeTitle)
             }else{
                 shape.fill()
@@ -110,6 +118,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
             .preferredColorScheme(.dark)
+.previewInterfaceOrientation(.portraitUpsideDown)
         ContentView()
             .preferredColorScheme(.light)
     }
