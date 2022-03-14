@@ -13,8 +13,10 @@
 import SwiftUI
 
 
-
-class EmojiMemoryGame{
+/* ObservableObject
+ A type alias for the Combine framework’s type for an object with a publisher that emits before the object has changed.
+ */
+class EmojiMemoryGame: ObservableObject{
     
     static let emojis: Array<String> = ["🌹", "🌸", "💐", "🌺", "🌷", "🌻", "🥀", "🌼"]
     /*
@@ -37,9 +39,16 @@ class EmojiMemoryGame{
      -> Solution3: use 'static'
      */
     
-    private var model: MemoryGame<String> = EmojiMemoryGame.createMemoryGame()
+    // evenytime the model changes, it will notify
+    @Published private var model: MemoryGame<String> = EmojiMemoryGame.createMemoryGame()
     
     var cards: Array<MemoryGame<String>.Card>{
         return model.cards
+    }
+    
+    // MARK: - Intent(s)
+    
+    func choose(_ card: MemoryGame<String>.Card){
+        model.choose(card)
     }
 }
